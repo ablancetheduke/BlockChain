@@ -45,7 +45,7 @@ contract KingOfTheEtherThrone {
     modifier onlywizard { if (msg.sender == wizardAddress) _; }
 
     // How much must the first monarch pay?
-    uint constant startingClaimPrice = 100 finney;
+    uint constant startingClaimPrice = 0.1 ether;
 
     // The next claimPrice is calculated from the previous claimFee
     // by multiplying by claimFeeAdjustNum and dividing by claimFeeAdjustDen -
@@ -81,7 +81,7 @@ contract KingOfTheEtherThrone {
         );
     }
 
-    function numberOfMonarchs() constant returns (uint n) {
+    function numberOfMonarchs() view returns (uint n) {
         return pastMonarchs.length;
     }
 
@@ -148,14 +148,14 @@ contract KingOfTheEtherThrone {
         uint rawNewClaimPrice = currentClaimPrice * claimPriceAdjustNum / claimPriceAdjustDen;
         if (rawNewClaimPrice < 10 finney) {
             currentClaimPrice = rawNewClaimPrice;
-        } else if (rawNewClaimPrice < 100 finney) {
+        } else if (rawNewClaimPrice < 0.1 ether) {
             currentClaimPrice = 100 szabo * (rawNewClaimPrice / 100 szabo);
         } else if (rawNewClaimPrice < 1 ether) {
             currentClaimPrice = 1 finney * (rawNewClaimPrice / 1 finney);
         } else if (rawNewClaimPrice < 10 ether) {
             currentClaimPrice = 10 finney * (rawNewClaimPrice / 10 finney);
         } else if (rawNewClaimPrice < 100 ether) {
-            currentClaimPrice = 100 finney * (rawNewClaimPrice / 100 finney);
+            currentClaimPrice = 0.1 ether * (rawNewClaimPrice / 0.1 ether);
         } else if (rawNewClaimPrice < 1000 ether) {
             currentClaimPrice = 1 ether * (rawNewClaimPrice / 1 ether);
         } else if (rawNewClaimPrice < 10000 ether) {

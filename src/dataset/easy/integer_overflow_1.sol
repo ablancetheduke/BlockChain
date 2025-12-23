@@ -4,21 +4,21 @@
  * @vulnerable_at_lines: 14
  */
 
- pragma solidity ^0.4.15;
+pragma solidity ^0.4.15;
 
- contract Overflow {
-     uint private sellerBalance=0;
+contract Overflow {
+    uint256 private sellerBalance = 0;
 
-     function add(uint value) returns (bool){
-         // <yes> <report> ARITHMETIC
-         sellerBalance += value; // possible overflow
+    function add(uint256 value) returns (bool) {
+        // <yes> <report> ARITHMETIC
+        sellerBalance += value; // possible overflow
 
-         // possible auditor assert
-         // assert(sellerBalance >= value);
-     }
+        // possible auditor assert
+        // assert(sellerBalance >= value);
+    }
 
-  // function safe_add(uint value) returns (bool){
-  //   require(value + sellerBalance >= sellerBalance);
-  // sellerBalance += value;
-  // } 
- }
+    // function safe_add(uint value) returns (bool){
+    //   require(value + sellerBalance >= sellerBalance);
+    // sellerBalance += value;
+    // }
+}

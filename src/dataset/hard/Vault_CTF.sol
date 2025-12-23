@@ -2,7 +2,12 @@
 pragma solidity ^0.8.13;
 
 contract Vault_CTF {
-    enum Stage { Start, Second, Third, Final }
+    enum Stage {
+        Start,
+        Second,
+        Third,
+        Final
+    }
     Stage public stage = Stage.Start;
 
     function step1(uint256 key) public {

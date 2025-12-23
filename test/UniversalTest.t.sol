@@ -20,9 +20,9 @@ contract UniversalTest is Test {
     function test_LogicGate_Unlock(address target, uint256 x, uint256 y) public {
         if (target == address(0)) return;
         ILogicGate gate = ILogicGate(target);
-        
+
         gate.unlock(x, y);
-        
+
         // 我们的目标是证明：存在一种输入能让 isUnlocked 变成 true
         // 这里的断言失败 = 发现漏洞成功
         assertFalse(gate.isUnlocked(), "SUCCESS: LogicGate Unlocked!");
@@ -32,10 +32,10 @@ contract UniversalTest is Test {
     function test_Telephone_Hack(address target, address attacker) public {
         if (target == address(0) || attacker == address(0)) return;
         ITelephone phone = ITelephone(target);
-        
+
         vm.prank(attacker, attacker); // 设置 tx.origin 为 attacker
         phone.changeOwner(attacker);
-        
+
         assertEq(phone.owner(), attacker, "SUCCESS: Ownership Stolen!");
     }
 }
