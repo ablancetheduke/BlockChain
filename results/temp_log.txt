@@ -1,0 +1,22 @@
+No files changed, compilation skipped
+
+Ran 2 tests for test/Counter.t.sol:CounterTest
+[PASS] testFuzz_SetNumber(uint256) (runs: 10, μ: 29289, ~: 29289)
+[PASS] test_Increment() (gas: 28783)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 463.72µs (397.26µs CPU time)
+
+Ran 2 tests for test/UniversalTest.t.sol:UniversalTest
+[FAIL: EvmError: Revert; counterexample: calldata=0x77adb9d30000000000000000000000000000000000000000000000000000000000001a1f000000000000000000000000000000000000000000000000000000000000092c00000000000000000000000000000000000000000000000000000000deadbeef args=[0x0000000000000000000000000000000000001a1f, 2348, 3735928559 [3.735e9]]] test_LogicGate_Unlock(address,uint256,uint256) (runs: 0, μ: 0, ~: 0)
+[FAIL: EvmError: Revert; counterexample: calldata=0x22129cb30000000000000000000000000000000000000000000000000000000000000eb20000000000000000000000000000000000000000000000000000000066d9a99f args=[0x0000000000000000000000000000000000000eB2, 0x0000000000000000000000000000000066d9a99F]] test_Telephone_Hack(address,address) (runs: 0, μ: 0, ~: 0)
+Suite result: FAILED. 0 passed; 2 failed; 0 skipped; finished in 533.07µs (778.19µs CPU time)
+
+Ran 2 test suites in 5.92ms (996.79µs CPU time): 2 tests passed, 2 failed, 0 skipped (4 total tests)
+
+Failing tests:
+Encountered 2 failing tests in test/UniversalTest.t.sol:UniversalTest
+[FAIL: EvmError: Revert; counterexample: calldata=0x77adb9d30000000000000000000000000000000000000000000000000000000000001a1f000000000000000000000000000000000000000000000000000000000000092c00000000000000000000000000000000000000000000000000000000deadbeef args=[0x0000000000000000000000000000000000001a1f, 2348, 3735928559 [3.735e9]]] test_LogicGate_Unlock(address,uint256,uint256) (runs: 0, μ: 0, ~: 0)
+[FAIL: EvmError: Revert; counterexample: calldata=0x22129cb30000000000000000000000000000000000000000000000000000000000000eb20000000000000000000000000000000000000000000000000000000066d9a99f args=[0x0000000000000000000000000000000000000eB2, 0x0000000000000000000000000000000066d9a99F]] test_Telephone_Hack(address,address) (runs: 0, μ: 0, ~: 0)
+
+Encountered a total of 2 failing tests, 2 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 2 failed tests
