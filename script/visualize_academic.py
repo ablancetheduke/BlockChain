@@ -27,7 +27,7 @@ def plot_coverage_jump():
     plt.plot(t, hybrid, '-', label='Ours: Hybrid (Formal-Assisted)', color='blue', linewidth=2.5)
     plt.axvline(x=40, color='red', linestyle=':', alpha=0.6)
     plt.text(42, 75, 'Formal Seed Injected', color='red', weight='bold')
-    plt.title('Fig 1. Cumulative Path Coverage Evolution', pad=15)
+    plt.title('Cumulative Path Coverage Evolution', pad=15)
     plt.xlabel('Test Budget / Time (%)')
     plt.ylabel('Edge Coverage (%)')
     plt.legend(loc='lower right')
@@ -56,7 +56,7 @@ def plot_radar():
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
     plt.xticks(angles[:-1], labels)
-    plt.title('Fig 2. Multi-dimensional Capability Assessment', pad=30)
+    plt.title('Multi-dimensional Capability Assessment', pad=30)
     plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
     plt.savefig(f"{output_dir}/capability_radar.png", dpi=300)
 
@@ -65,7 +65,7 @@ def plot_latency():
     plt.figure(figsize=(10, 6))
     sns.violinplot(x='Category', y='Time', hue='Group', data=df, split=False, inner="quart")
     plt.yscale('log')
-    plt.title('Fig 3. Vulnerability Discovery Latency Distribution')
+    plt.title('Vulnerability Discovery Latency Distribution')
     plt.ylabel('Time (Seconds) - Log Scale')
     plt.savefig(f"{output_dir}/latency_distribution.png", dpi=300)
 
@@ -74,7 +74,7 @@ def plot_heatmap():
     plt.figure(figsize=(10, 4))
     pivot = df.pivot_table(index='Group', columns='Category', values='Coverage', aggfunc='mean')
     sns.heatmap(pivot, annot=True, cmap='YlGnBu', cbar_kws={'label': 'Avg. Coverage %'})
-    plt.title('Fig 4. Methodology Efficiency Matrix')
+    plt.title('Methodology Efficiency Matrix')
     plt.savefig(f"{output_dir}/efficiency_heatmap.png", dpi=300)
 
 if __name__ == "__main__":
