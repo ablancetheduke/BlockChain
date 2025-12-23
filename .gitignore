@@ -1,0 +1,15 @@
+# 忽略编译产物
+out/
+cache/
+lib/
+
+# 忽略 Python 垃圾文件
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# 允许上传 results 文件夹下的所有内容（包括图片）
+# 如果之前写了忽略，现在这行会确保它们被包含
+!results/
+!results/plots/
