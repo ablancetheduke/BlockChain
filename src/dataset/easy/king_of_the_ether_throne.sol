@@ -24,7 +24,6 @@
 pragma solidity ^0.4.0;
 
 contract KingOfTheEtherThrone {
-
     struct Monarch {
         // Address to which their compensation will be sent.
         address etherAddress;
@@ -32,9 +31,9 @@ contract KingOfTheEtherThrone {
         // NB: Unfortunately "string" seems to expose some bugs in web3.
         string name;
         // How much did they pay to become monarch?
-        uint claimPrice;
+        uint256 claimPrice;
         // When did their rule start (based on block.timestamp)?
-        uint coronationTimestamp;
+        uint256 coronationTimestamp;
     }
 
     // The wizard is the hidden power behind the throne; they
@@ -42,25 +41,27 @@ contract KingOfTheEtherThrone {
     address wizardAddress;
 
     // Used to ensure only the wizard can do some things.
-    modifier onlywizard { if (msg.sender == wizardAddress) _; }
+    modifier onlywizard() {
+        if (msg.sender == wizardAddress) _;
+    }
 
     // How much must the first monarch pay?
-    uint constant startingClaimPrice = 0.1 ether;
+    uint256 constant startingClaimPrice = 0.1 ether;
 
     // The next claimPrice is calculated from the previous claimFee
     // by multiplying by claimFeeAdjustNum and dividing by claimFeeAdjustDen -
     // for example, num=3 and den=2 would cause a 50% increase.
-    uint constant claimPriceAdjustNum = 3;
-    uint constant claimPriceAdjustDen = 2;
+    uint256 constant claimPriceAdjustNum = 3;
+    uint256 constant claimPriceAdjustDen = 2;
 
     // How much of each claimFee goes to the wizard (expressed as a fraction)?
     // e.g. num=1 and den=100 would deduct 1% for the wizard, leaving 99% as
     // the compensation fee for the usurped monarch.
-    uint constant wizardCommissionFractionNum = 1;
-    uint constant wizardCommissionFractionDen = 100;
+    uint256 constant wizardCommissionFractionNum = 1;
+    uint256 constant wizardCommissionFractionDen = 100;
 
     // How much must an agent pay now to become the monarch?
-    uint public currentClaimPrice;
+    uint256 public currentClaimPrice;
 
     // The King (or Queen) of the Ether.
     Monarch public currentMonarch;
@@ -73,36 +74,26 @@ contract KingOfTheEtherThrone {
     function KingOfTheEtherThrone() {
         wizardAddress = msg.sender;
         currentClaimPrice = startingClaimPrice;
-        currentMonarch = Monarch(
-            wizardAddress,
-            "[Vacant]",
-            0,
-            block.timestamp
-        );
+        currentMonarch = Monarch(wizardAddress, "[Vacant]", 0, block.timestamp);
     }
 
-    function numberOfMonarchs() view returns (uint n) {
+    function numberOfMonarchs() view returns (uint256 n) {
         return pastMonarchs.length;
     }
 
     // Fired when the throne is claimed.
     // In theory can be used to help build a front-end.
-    event ThroneClaimed(
-        address usurperEtherAddress,
-        string usurperName,
-        uint newClaimPrice
-    );
+    event ThroneClaimed(address usurperEtherAddress, string usurperName, uint256 newClaimPrice);
 
     // Fallback function - simple transactions trigger this.
     // Assume the message data is their desired name.
-    function() {
+    fallback() external payable {
         claimThrone(string(msg.data));
     }
 
     // Claim the throne for the given name by paying the currentClaimFee.
     function claimThrone(string name) {
-
-        uint valuePaid = msg.value;
+        uint256 valuePaid = msg.value;
 
         // If they paid too little, reject claim and refund their money.
         if (valuePaid < currentClaimPrice) {
@@ -113,7 +104,7 @@ contract KingOfTheEtherThrone {
 
         // If they paid too much, continue with claim but refund the excess.
         if (valuePaid > currentClaimPrice) {
-            uint excessPaid = valuePaid - currentClaimPrice;
+            uint256 excessPaid = valuePaid - currentClaimPrice;
             // <yes> <report> UNCHECKED_LL_CALLS
             msg.sender.send(excessPaid);
             valuePaid = valuePaid - excessPaid;
@@ -123,9 +114,9 @@ contract KingOfTheEtherThrone {
         // (with a commission held back for the wizard). We let the wizard's
         // payments accumulate to avoid wasting gas sending small fees.
 
-        uint wizardCommission = (valuePaid * wizardCommissionFractionNum) / wizardCommissionFractionDen;
+        uint256 wizardCommission = (valuePaid * wizardCommissionFractionNum) / wizardCommissionFractionDen;
 
-        uint compensation = valuePaid - wizardCommission;
+        uint256 compensation = valuePaid - wizardCommission;
 
         if (currentMonarch.etherAddress != wizardAddress) {
             // <yes> <report> UNCHECKED_LL_CALLS
@@ -136,24 +127,19 @@ contract KingOfTheEtherThrone {
 
         // Usurp the current monarch, replacing them with the new one.
         pastMonarchs.push(currentMonarch);
-        currentMonarch = Monarch(
-            msg.sender,
-            name,
-            valuePaid,
-            block.timestamp
-        );
+        currentMonarch = Monarch(msg.sender, name, valuePaid, block.timestamp);
 
         // Increase the claim fee for next time.
         // Stop number of trailing decimals getting silly - we round it a bit.
-        uint rawNewClaimPrice = currentClaimPrice * claimPriceAdjustNum / claimPriceAdjustDen;
-        if (rawNewClaimPrice < 10 finney) {
+        uint256 rawNewClaimPrice = currentClaimPrice * claimPriceAdjustNum / claimPriceAdjustDen;
+        if (rawNewClaimPrice < 0.01 ether) {
             currentClaimPrice = rawNewClaimPrice;
         } else if (rawNewClaimPrice < 0.1 ether) {
-            currentClaimPrice = 100 szabo * (rawNewClaimPrice / 100 szabo);
+            currentClaimPrice = 0.0001 ether * (rawNewClaimPrice / 0.0001 ether);
         } else if (rawNewClaimPrice < 1 ether) {
-            currentClaimPrice = 1 finney * (rawNewClaimPrice / 1 finney);
+            currentClaimPrice = 0.001 ether * (rawNewClaimPrice / 0.001 ether);
         } else if (rawNewClaimPrice < 10 ether) {
-            currentClaimPrice = 10 finney * (rawNewClaimPrice / 10 finney);
+            currentClaimPrice = 0.01 ether * (rawNewClaimPrice / 0.01 ether);
         } else if (rawNewClaimPrice < 100 ether) {
             currentClaimPrice = 0.1 ether * (rawNewClaimPrice / 0.1 ether);
         } else if (rawNewClaimPrice < 1000 ether) {
@@ -169,7 +155,7 @@ contract KingOfTheEtherThrone {
     }
 
     // Used only by the wizard to collect his commission.
-    function sweepCommission(uint amount) onlywizard {
+    function sweepCommission(uint256 amount) onlywizard {
         // <yes> <report> UNCHECKED_LL_CALLS
         wizardAddress.send(amount);
     }
@@ -178,5 +164,4 @@ contract KingOfTheEtherThrone {
     function transferOwnership(address newOwner) onlywizard {
         wizardAddress = newOwner;
     }
-
 }
