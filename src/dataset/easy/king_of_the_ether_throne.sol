@@ -87,7 +87,7 @@ contract KingOfTheEtherThrone {
 
     // Fallback function - simple transactions trigger this.
     // Assume the message data is their desired name.
-    fallback() external payable {
+    function() payable {
         claimThrone(string(msg.data));
     }
 
